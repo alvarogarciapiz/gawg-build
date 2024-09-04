@@ -32,6 +32,7 @@ runs:
         TECHNOLOGIES=("python" "node" "maven")
         if [[ " ${TECHNOLOGIES[@]} " =~ " ${{ inputs.technology }} " ]]; then
           echo "✅ ${{ inputs.technology }} is a valid technology."
+          echo "## Build, Test & Package" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ Error: ${{ inputs.technology }} is not a valid technology."
           echo "::error:: ❌ Error: ${{ inputs.technology }} is not a valid technology."
@@ -110,7 +111,19 @@ runs:
       run: |
         echo "Building node project..."
         npm install
-        npm run build
+        output=$(npm run build 2>&1)
+        status=$?
+        echo "$output"
+        if [ $status -eq 0 ]; then
+          echo "✅ Build succeeded"
+          echo "BUILD_STATUS=success" >> $GITHUB_ENV
+          echo "✅ Node Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Build failed"
+          echo "BUILD_STATUS=failure" >> $GITHUB_ENV
+          echo "❌ Node Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
 
     - name: Create Node artifact
       if: ${{ inputs.technology == 'node' }}
