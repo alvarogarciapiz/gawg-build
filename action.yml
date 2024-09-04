@@ -27,6 +27,8 @@ runs:
     - name: Validate technology
       shell: bash
       run: |
+        echo ""
+        echo "========================================= TECHNOLOGY VALIDATION =========================================="
         TECHNOLOGIES=("python" "node" "maven")
         if [[ " ${TECHNOLOGIES[@]} " =~ " ${{ inputs.technology }} " ]]; then
           echo "✅ ${{ inputs.technology }} is a valid technology."
@@ -35,14 +37,18 @@ runs:
           echo "::error:: ❌ Error: ${{ inputs.technology }} is not a valid technology."
           exit 1
         fi
+        echo ""
 
     - name: Generate artifact name
       shell: bash
       id: artifact-name
       run: |
+        echo ""
+        echo "========================================= ARTIFACT NAME =========================================="
         echo "Generating artifact name..."
         echo "ARTIFACT_NAME is: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))"
         echo "ARTIFACT_NAME=$(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))" >> $GITHUB_OUTPUT
+        echo ""
 
     - name: Set-up JAVA environment
       if: ${{ inputs.technology == 'maven' }}
@@ -90,14 +96,6 @@ runs:
         retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
         overwrite: true
         path: ${{ fromJson(inputs.config-json).PYTHON_DIST_DIR }}
-
-    - name: test node variables
-      if: ${{ inputs.technology == 'node' }}
-      shell: bash
-      run: |
-        echo "NODE_VERSION: ${{ fromJson(inputs.config-json).NODE_VERSION }}"
-        echo "NODE_DIST_DIR: ${{ fromJson(inputs.config-json).NODE_DIST_DIR }}"
-        echo "RETENTION_DAYS: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}"
 
     - name: Set-up Node environment
       if: ${{ inputs.technology == 'node' }}
