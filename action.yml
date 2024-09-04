@@ -40,6 +40,8 @@ runs:
       shell: bash
       id: artifact-name
       run: |
+        echo "Generating artifact name..."
+        echo "ARTIFACT_NAME is: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))"
         echo "ARTIFACT_NAME=$(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))" >> $GITHUB_OUTPUT
 
     - name: Set-up JAVA environment
@@ -88,6 +90,13 @@ runs:
         retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
         overwrite: true
         path: ${{ fromJson(inputs.config-json).PYTHON_DIST_DIR }}
+
+    - name: test node variables
+      if: ${{ inputs.technology == 'node' }}
+      run: |
+        echo "NODE_VERSION: ${{ fromJson(inputs.config-json).NODE_VERSION }}"
+        echo "NODE_DIST_DIR: ${{ fromJson(inputs.config-json).NODE_DIST_DIR }}"
+        echo "RETENTION_DAYS: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}"
 
     - name: Set-up Node environment
       if: ${{ inputs.technology == 'node' }}
