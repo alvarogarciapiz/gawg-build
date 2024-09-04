@@ -32,10 +32,13 @@ runs:
         TECHNOLOGIES=("python" "node" "maven")
         if [[ " ${TECHNOLOGIES[@]} " =~ " ${{ inputs.technology }} " ]]; then
           echo "✅ ${{ inputs.technology }} is a valid technology."
-          echo "## Build, Test & Package" >> $GITHUB_STEP_SUMMARY
+          echo "## Build status information" >> $GITHUB_STEP_SUMMARY
+          echo "✅ ${{ inputs.technology }} technology validation PASSED." >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ Error: ${{ inputs.technology }} is not a valid technology."
           echo "::error:: ❌ Error: ${{ inputs.technology }} is not a valid technology."
+          echo "## Build status information" >> $GITHUB_STEP_SUMMARY
+          echo "❌ ${{ inputs.technology }} technology validation FAILED." >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
         echo ""
@@ -49,6 +52,8 @@ runs:
         echo "Generating artifact name..."
         echo "ARTIFACT_NAME is: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))"
         echo "ARTIFACT_NAME=$(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))" >> $GITHUB_OUTPUT
+        echo "✅ Artifact name generated successfully."
+        echo "Artifact name generated: $ARTIFACT_NAME." >> $GITHUB_STEP_SUMMARY
         echo ""
 
     - name: Set-up JAVA environment
