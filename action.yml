@@ -53,7 +53,7 @@ runs:
         echo "ARTIFACT_NAME is: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))"
         echo "ARTIFACT_NAME=$(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))" >> $GITHUB_OUTPUT
         echo "✅ Artifact name generated successfully."
-        echo "Artifact name generated: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))." >> $GITHUB_STEP_SUMMARY
+        echo "🔧 Artifact name generated: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))." >> $GITHUB_STEP_SUMMARY
         echo ""
 
     - name: Set-up JAVA environment
