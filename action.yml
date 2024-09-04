@@ -93,6 +93,7 @@ runs:
 
     - name: test node variables
       if: ${{ inputs.technology == 'node' }}
+      shell: bash
       run: |
         echo "NODE_VERSION: ${{ fromJson(inputs.config-json).NODE_VERSION }}"
         echo "NODE_DIST_DIR: ${{ fromJson(inputs.config-json).NODE_DIST_DIR }}"
