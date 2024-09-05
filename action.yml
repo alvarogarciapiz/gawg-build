@@ -8,7 +8,7 @@ branding:
 inputs:
   technology:
     type: string
-    description: 'Technology to use for the build. Avaliable options: maven, python, node.'
+    description: 'Technology to use for the build. Avaliable options: maven, python, node, gradle.'
     required: true
 
   config-json:
@@ -64,12 +64,22 @@ runs:
         java-version: ${{ fromJson(inputs.config-json).JAVA_VERSION }}
 
     - name: Build maven project
-      id: build-maven
-      if: ${{ inputs.technology == 'maven' }}
-      shell: bash
-      run: |
-        echo "Building maven project..."
-        mvn clean install
+        id: build-maven
+        if: ${{ inputs.technology == 'maven' }}
+        shell: bash
+        run: |
+          echo "Building maven project..."
+          output=$(mvn clean install 2>&1)
+          status=$?
+          echo "$output"
+          if [ $status -eq 0 ]; then
+            echo "✅ Maven Build Status: SUCCESS"
+            echo "✅ Maven Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Maven Build Status: FAILED"
+            echo "❌ Maven Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
 
     - name: Create JAVA artifact
       if: ${{ inputs.technology == 'maven' }}
@@ -92,7 +102,17 @@ runs:
       shell: bash
       run: |
         echo "Building python project..."
-        python3 -m pip install -r requirements.txt
+        output=$(python3 -m pip install -r requirements.txt 2>&1)
+        status=$?
+        echo "$output"
+        if [ $status -eq 0 ]; then
+          echo "✅ Python Build Status: SUCCESS"
+          echo "✅ Python Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Python Build Status: FAILED"
+          echo "❌ Python Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
 
     - name: Create Python artifact
       if: ${{ inputs.technology == 'python' }}
@@ -120,12 +140,10 @@ runs:
         status=$?
         echo "$output"
         if [ $status -eq 0 ]; then
-          echo "✅ Build succeeded"
-          echo "BUILD_STATUS=success" >> $GITHUB_ENV
+          echo "✅ Node Build Status: SUCCESS"
           echo "✅ Node Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
         else
-          echo "❌ Build failed"
-          echo "BUILD_STATUS=failure" >> $GITHUB_ENV
+          echo "❌ Node Build Status: FAILED"
           echo "❌ Node Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
           exit 1
         fi
