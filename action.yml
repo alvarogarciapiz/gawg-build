@@ -148,11 +148,11 @@ runs:
           exit 1
         fi
 
-    - name: Create Node artifact
-      if: ${{ inputs.technology == 'node' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ steps.artifact-name.outputs.ARTIFACT_NAME }}
-        retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
-        overwrite: true
-        path: ${{ fromJson(inputs.config-json).NODE_DIST_DIR }}
+    # - name: Create Node artifact
+    #   if: ${{ inputs.technology == 'node' }}
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ${{ steps.artifact-name.outputs.ARTIFACT_NAME }}
+    #     retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
+    #     overwrite: true
+    #     path: ${{ fromJson(inputs.config-json).NODE_DIST_DIR }}
