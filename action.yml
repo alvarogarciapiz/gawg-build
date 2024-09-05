@@ -60,8 +60,8 @@ runs:
       if: ${{ inputs.technology == 'maven' }}
       uses: actions/setup-java@v4
       with:
-        distribution: ${{ fromJson(inputs.config-json).JAVA_DISTRIBUTION }} # VALIDAR
-        java-version: ${{ fromJson(inputs.config-json).JAVA_VERSION }} # VALIDAR
+        distribution: ${{ fromJson(inputs.config-json).JAVA_DISTRIBUTION }}
+        java-version: ${{ fromJson(inputs.config-json).JAVA_VERSION }}
 
     - name: Build maven project
       id: build-maven
@@ -84,7 +84,7 @@ runs:
       if: ${{ inputs.technology == 'python' }}
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ fromJson(inputs.config-json).PYTHON_VERSION }} # VALIDAR
+        python-version: ${{ fromJson(inputs.config-json).PYTHON_VERSION }}
 
     - name: Build python project
       id: build-python
@@ -107,7 +107,7 @@ runs:
       if: ${{ inputs.technology == 'node' }}
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ fromJson(inputs.config-json).NODE_VERSION }} # VALIDAR
+        node-version: ${{ fromJson(inputs.config-json).NODE_VERSION }} 
 
     - name: Build node project
       id: build-node
