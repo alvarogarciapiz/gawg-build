@@ -64,22 +64,22 @@ runs:
         java-version: ${{ fromJson(inputs.config-json).JAVA_VERSION }}
 
     - name: Build maven project
-        id: build-maven
-        if: ${{ inputs.technology == 'maven' }}
-        shell: bash
-        run: |
-          echo "Building maven project..."
-          output=$(mvn clean install 2>&1)
-          status=$?
-          echo "$output"
-          if [ $status -eq 0 ]; then
-            echo "✅ Maven Build Status: SUCCESS"
-            echo "✅ Maven Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Maven Build Status: FAILED"
-            echo "❌ Maven Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
+      id: build-maven
+      if: ${{ inputs.technology == 'maven' }}
+      shell: bash
+      run: |
+        echo "Building maven project..."
+        output=$(mvn clean install 2>&1)
+        status=$?
+        echo "$output"
+        if [ $status -eq 0 ]; then
+          echo "✅ Maven Build Status: SUCCESS"
+          echo "✅ Maven Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Maven Build Status: FAILED"
+          echo "❌ Maven Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
 
     - name: Create JAVA artifact
       if: ${{ inputs.technology == 'maven' }}
