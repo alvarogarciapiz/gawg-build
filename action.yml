@@ -32,8 +32,6 @@ runs:
         TECHNOLOGIES=("python" "node" "maven")
         if [[ " ${TECHNOLOGIES[@]} " =~ " ${{ inputs.technology }} " ]]; then
           echo "✅ ${{ inputs.technology }} is a valid technology."
-          echo "## Build status information" >> $GITHUB_STEP_SUMMARY
-          echo "✅ ${{ inputs.technology }} technology validation PASSED." >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ Error: ${{ inputs.technology }} is not a valid technology."
           echo "::error:: ❌ Error: ${{ inputs.technology }} is not a valid technology."
@@ -53,7 +51,7 @@ runs:
         echo "ARTIFACT_NAME is: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))"
         echo "ARTIFACT_NAME=$(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))" >> $GITHUB_OUTPUT
         echo "✅ Artifact name generated successfully."
-        echo "🔧 Artifact name generated: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))." >> $GITHUB_STEP_SUMMARY
+        echo "🔧 Artifact name generated: $(echo ${{ fromJson(inputs.config-json).PROJECT_NAME }}-${{ inputs.technology }}-$(date +'%Y%m%d%H%M%S'))."
         echo ""
 
     - name: Set-up JAVA environment
@@ -74,7 +72,6 @@ runs:
         echo "$output"
         if [ $status -eq 0 ]; then
           echo "✅ Maven Build Status: SUCCESS"
-          echo "✅ Maven Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ Maven Build Status: FAILED"
           echo "❌ Maven Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
@@ -107,7 +104,6 @@ runs:
         echo "$output"
         if [ $status -eq 0 ]; then
           echo "✅ Python Build Status: SUCCESS"
-          echo "✅ Python Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ Python Build Status: FAILED"
           echo "❌ Python Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
@@ -141,7 +137,6 @@ runs:
         echo "$output"
         if [ $status -eq 0 ]; then
           echo "✅ Node Build Status: SUCCESS"
-          echo "✅ Node Build Status: SUCCESS" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ Node Build Status: FAILED"
           echo "❌ Node Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
