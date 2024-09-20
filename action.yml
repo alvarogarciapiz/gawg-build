@@ -187,9 +187,13 @@ runs:
         path: ./${{ fromJson(inputs.config-json).PROJECT_NAME }}_${{ fromJson(inputs.config-json).PROJECT_VERSION }}
 
 
+    - name: Checkout code
+      if: ${{ inputs.technology == 'ruby' }}
+      uses: actions/checkout@v4
+      
     - name: Set-up Ruby environment
       if: ${{ inputs.technology == 'ruby' }}
-      uses: actions/setup-ruby@main
+      uses: actions/setup-ruby@v1
       with:
         ruby-version: ${{ fromJson(inputs.config-json).RUBY_VERSION }}
     
