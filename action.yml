@@ -208,7 +208,6 @@ runs:
         echo "$output"
         if [ $status -eq 0 ]; then
           echo "✅ Ruby Build Status: SUCCESS"
-          ls -lah
         else
           echo "❌ Ruby Build Status: FAILED"
           echo "❌ Ruby Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
