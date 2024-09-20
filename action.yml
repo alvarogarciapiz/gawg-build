@@ -29,7 +29,7 @@ runs:
       run: |
         echo ""
         echo "========================================= TECHNOLOGY VALIDATION =========================================="
-        TECHNOLOGIES=("python" "node" "maven" "go")
+        TECHNOLOGIES=("python" "node" "maven" "go" "ruby")
         if [[ " ${TECHNOLOGIES[@]} " =~ " ${{ inputs.technology }} " ]]; then
           echo "✅ ${{ inputs.technology }} is a valid technology."
         else
@@ -171,6 +171,7 @@ runs:
         echo "$output"
         if [ $status -eq 0 ]; then
           echo "✅ Go Build Status: SUCCESS"
+          ls -lah
         else
           echo "❌ Go Build Status: FAILED"
           echo "❌ Go Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
@@ -185,3 +186,36 @@ runs:
         retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
         overwrite: true
         path: ./${{ fromJson(inputs.config-json).PROJECT_NAME }}_${{ fromJson(inputs.config-json).PROJECT_VERSION }}
+
+
+    - name: Set-up Ruby environment
+      if: ${{ inputs.technology == 'ruby' }}
+      uses: actions/setup-ruby@main
+      with:
+        ruby-version: ${{ fromJson(inputs.config-json).RUBY_VERSION }}
+    
+    - name: Build Ruby project
+      id: build-ruby
+      if: ${{ inputs.technology == 'ruby' }}
+      shell: bash
+      run: |
+        echo "Building Ruby project..."
+        output=$(bundle install && rake build 2>&1)
+        status=$?
+        echo "$output"
+        if [ $status -eq 0 ]; then
+          echo "✅ Ruby Build Status: SUCCESS"
+        else
+          echo "❌ Ruby Build Status: FAILED"
+          echo "❌ Ruby Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+    
+    - name: Create Ruby artifact
+      if: ${{ inputs.technology == 'ruby' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.artifact-name.outputs.ARTIFACT_NAME }}
+        retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
+        overwrite: true
+        path: ./pkg
