@@ -119,6 +119,7 @@ runs:
         overwrite: true
         path: ${{ fromJson(inputs.config-json).PYTHON_DIST_DIR }}
 
+
     - name: Set-up Node environment
       if: ${{ inputs.technology == 'node' }}
       uses: actions/setup-node@v4
@@ -151,3 +152,36 @@ runs:
         retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
         overwrite: true
         path: ${{ fromJson(inputs.config-json).NODE_DIST_DIR }}
+
+
+    - name: Set-up Go environment
+      if: ${{ inputs.technology == 'go' }}
+      uses: actions/setup-go@main
+      with:
+        go-version: '${{ fromJson(inputs.config-json).GO_VERSION }}'
+    
+    - name: Build Go project
+      id: build-go
+      if: ${{ inputs.technology == 'go' }}
+      shell: bash
+      run: |
+        echo "Building Go project..."
+        output=$(go build -o ${{ fromJson(inputs.config-json).PROJECT_NAME }}_${{ fromJson(inputs.config-json).PROJECT_VERSION }} 2>&1)
+        status=$?
+        echo "$output"
+        if [ $status -eq 0 ]; then
+          echo "✅ Go Build Status: SUCCESS"
+        else
+          echo "❌ Go Build Status: FAILED"
+          echo "❌ Go Build Status: FAILED" >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+    
+    - name: Create Go artifact
+      if: ${{ inputs.technology == 'go' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.artifact-name.outputs.ARTIFACT_NAME }}
+        retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
+        overwrite: true
+        path: ./${{ fromJson(inputs.config-json).PROJECT_NAME }}_${{ fromJson(inputs.config-json).PROJECT_VERSION }}
