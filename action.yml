@@ -193,7 +193,7 @@ runs:
       
     - name: Set-up Ruby environment
       if: ${{ inputs.technology == 'ruby' }}
-      uses: actions/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+      uses: actions/setup-ruby@v1
       with:
         ruby-version: ${{ fromJson(inputs.config-json).RUBY_VERSION }}
     
