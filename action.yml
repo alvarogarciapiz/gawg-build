@@ -203,7 +203,7 @@ runs:
       shell: bash
       run: |
         echo "Building Ruby project..."
-        output=$(bundle install && rake build 2>&1)
+        output=$(bundle install 2>&1)
         status=$?
         echo "$output"
         if [ $status -eq 0 ]; then
@@ -222,4 +222,4 @@ runs:
         name: ${{ steps.artifact-name.outputs.ARTIFACT_NAME }}
         retention-days: ${{ fromJson(inputs.config-json).RETENTION_DAYS }}
         overwrite: true
-        path: ./pkg
+        path: ./
