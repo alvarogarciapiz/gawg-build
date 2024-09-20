@@ -29,7 +29,7 @@ runs:
       run: |
         echo ""
         echo "========================================= TECHNOLOGY VALIDATION =========================================="
-        TECHNOLOGIES=("python" "node" "maven")
+        TECHNOLOGIES=("python" "node" "maven" "go")
         if [[ " ${TECHNOLOGIES[@]} " =~ " ${{ inputs.technology }} " ]]; then
           echo "✅ ${{ inputs.technology }} is a valid technology."
         else
